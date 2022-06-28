@@ -41,7 +41,7 @@ class ViewController: UIViewController {
             return cell
         }
         
-        let dataSource = UITableViewDiffableDataSource<Section, Row>(tableView: tableView, cellProvider: cellProvider)
+        let dataSource = DataSource(tableView: tableView, cellProvider: cellProvider)
         tableView.dataSource = dataSource
         self.dataSource = dataSource
     }
@@ -50,18 +50,14 @@ class ViewController: UIViewController {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(Row.allCases, toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: false) {
-            print(#function + " completion called")
-        }
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     func applyNewSnapshot() {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(Row.allCases.reversed(), toSection: .main)
-        dataSource.apply(snapshot, animatingDifferences: true) {
-            print(#function + " completion called")
-        }
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
