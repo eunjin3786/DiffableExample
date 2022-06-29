@@ -1,52 +1,65 @@
 import UIKit
 
-struct Post {
-    let uuid = UUID()
+struct Post: Hashable {
     let title: String
+    
+    let uuid = UUID()
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
+    }
 }
 
 class ViewController2: UIViewController {
 
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, UUID>
-    typealias DataSource = UITableViewDiffableDataSource<Section, UUID>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Row>
+    typealias DataSource = UITableViewDiffableDataSource<Section, Row>
 
     @IBOutlet weak var tableView: UITableView!
+
+    enum Section: CaseIterable {
+        case top
+        case post
+        case bottom
+    }
+    
+    enum Row: Hashable {
+        case topMessage(String)
+        case postContent(Post)
+        case bottomMessage(String)
+    }
+    
     var dataSource: DataSource!
+    
     var posts: [Post] = [
         Post(title: "포스팅 1"),
         Post(title: "포스팅 2"),
         Post(title: "포스팅 3")
     ]
     
-    enum Section: Int, CaseIterable {
-        case top
-        case post
-        case bottom
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         applyInitialSnapshot()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.replaceTopMessage()
+        }
     }
     
     private func setupTableView() {
-        let cellProvider = {
-            [weak self] (tableView: UITableView, indexPath: IndexPath, uuid: UUID) -> UITableViewCell? in
-            guard let self = self else { return nil }
-            switch Section(rawValue: indexPath.section)! {
-            case .top:
+        let cellProvider = { (tableView: UITableView, indexPath: IndexPath, row: Row) -> UITableViewCell? in
+            switch row {
+            case .topMessage(let message):
                 let cell = UITableViewCell() // 예제여서 dequeueReusableCell 안해줌.
-                cell.textLabel?.text = "탑 메세지"
+                cell.textLabel?.text = message
                 return cell
-            case .post:
-                let post = self.posts[indexPath.row]
+            case .postContent(let post):
                 let cell = UITableViewCell() // 예제여서 dequeueReusableCell 안해줌.
                 cell.textLabel?.text = post.title
                 return cell
-            case .bottom:
+            case .bottomMessage(let message):
                 let cell = UITableViewCell() // 예제여서 dequeueReusableCell 안해줌.
-                cell.textLabel?.text = "바텀 메세지"
+                cell.textLabel?.text = message
                 return cell
             }
         }
@@ -59,9 +72,17 @@ class ViewController2: UIViewController {
     func applyInitialSnapshot() {
         var snapshot = Snapshot()
         snapshot.appendSections(Section.allCases)
-        snapshot.appendItems([UUID()], toSection: .top)
-        snapshot.appendItems(self.posts.map { $0.uuid }, toSection: .post)
-        snapshot.appendItems([UUID()], toSection: .bottom)
+        snapshot.appendItems([.topMessage("탑 메세지")], toSection: .top)
+        snapshot.appendItems(self.posts.map { Row.postContent($0) }, toSection: .post)
+        snapshot.appendItems([.bottomMessage("바텀 메세지")], toSection: .bottom)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func replaceTopMessage() {
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteItems([.topMessage("탑 메세지")])
+        snapshot.appendItems([.topMessage("새로운 탑 메세지")], toSection: .top)
+        dataSource.defaultRowAnimation = .none
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
