@@ -39,6 +39,36 @@
             </objects>
             <point key="canvasLocation" x="20" y="98"/>
         </scene>
+        <!--View Controller2-->
+        <scene sceneID="xD2-vx-N2t">
+            <objects>
+                <viewController id="MsN-4r-ur2" customClass="ViewController2" customModule="DiffableExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2kM-cr-Tha">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xc5-zk-pUs">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Mqp-rg-LwK"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xc5-zk-pUs" firstAttribute="leading" secondItem="Mqp-rg-LwK" secondAttribute="leading" id="euC-lQ-sFl"/>
+                            <constraint firstItem="Mqp-rg-LwK" firstAttribute="bottom" secondItem="xc5-zk-pUs" secondAttribute="bottom" id="kRh-Fc-SGe"/>
+                            <constraint firstItem="xc5-zk-pUs" firstAttribute="top" secondItem="Mqp-rg-LwK" secondAttribute="top" id="lSz-95-FCL"/>
+                            <constraint firstItem="Mqp-rg-LwK" firstAttribute="trailing" secondItem="xc5-zk-pUs" secondAttribute="trailing" id="r6G-Ji-Y2Q"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="xc5-zk-pUs" id="UGZ-7O-n3H"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rk5-kJ-lZU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="812" y="110"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
